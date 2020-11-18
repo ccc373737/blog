@@ -1,0 +1,16 @@
+通常mq拉取消息的思路分为两种
+
+- pull模式：客户端拉取消息模式，在客户端实现，且需要自己把控拉取频率，优化不到位可能产生消息延迟和消息忙等待。
+
+- push模式：由消息系统主动推送给消费者，对于消费端可能出现慢消费问题，甚至导致缓冲区溢出，消息端和消费端的压力都有可能变大。
+
+rmq中优化了pull模式，大致思路如下：
+
+consumer端开启一独立线程根据负载均衡的分析向pullrequestqueue这个队列中加入pull请求，
+另外再开启线程不断从这个队列中获取pull请求并推送给broker端要求拉取，消费端整个过程就是以一定速率向broker发送pull请求。
+
+而在broker端使用长轮询机制，接收到消费端的pull请求后，如果暂时没有可消费的数据，那么先hold住线程暂时不返回。
+- pullRequestHolderService这个服务会重复执行pull请求尝试获取数据（默认为5s重试，30s为一次长轮询时间）
+
+- requsetMessageService这个服务在后台会不断从commitlog上解析数据并分发请求，会构建出consumerqueue和其中的index数据，这个服务处理完queue后，
+HolderService就可以得到数据了。
