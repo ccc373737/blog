@@ -1,6 +1,8 @@
 ### 1.几种mq比较
-
+![](./images/mq2.jpeg)
 ### 2.rocketmq架构
+
+![](./images/mq3.jpg)
 
 - nameserver集群：无状态命名服务，负责发现和更新broker
 - broker集群：消息存储服务，存储和转发，broker启动后将自己注册到nameserver中，并定期向nameserver报告topic消息
@@ -19,6 +21,8 @@ topic是一个逻辑概念，实际的存储并不会按topic划分
 
 - ConsumeQueue：ConsumeQueue本身并不存储消息，它存储消息在commitlog中的偏移量，即可以理解为ConsumeQueue是CommitLog的索引。
 ConsumeQueue代表了某个Topic下的一个队列，记录了某个Topic下的索引文件。
+
+![](./images/mq4.png)
 
 通常集群模式会做broker的分片，即某个Topic下会分成多个Queue，以负载均衡的模式将消息排列在不同的队列中，多个消费者可以并行消费。
 

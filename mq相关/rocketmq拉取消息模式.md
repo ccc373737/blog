@@ -13,4 +13,4 @@ consumer端开启一独立线程根据负载均衡的分析向pullrequestqueue�
 - pullRequestHolderService这个服务会重复执行pull请求尝试获取数据（默认为5s重试，30s为一次长轮询时间）
 
 - requsetMessageService这个服务在后台会不断从commitlog上解析数据并分发请求，会构建出consumerqueue和其中的index数据，这个服务处理完queue后，
-HolderService就可以得到数据了。
+HolderService就可以得到数据了。``
