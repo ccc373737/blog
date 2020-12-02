@@ -84,7 +84,7 @@ public void refresh() throws BeansException, IllegalStateException {
 6.完成所有上下文刷新，一个容器就完整地生成了。
 
 ****
-####创建beanFactory和BeanDefinition详解
+###2创建beanFactory和BeanDefinition详解
 
 2.1 创建新的beanFactory实现容器DefaultListableBeanFactory。
 
@@ -110,7 +110,7 @@ public class MyBeanNameAware implements BeanNameAware {
 此时可以获得beanName做相关业务操作。
 
 ****
-####beanFactory后处理详解
+###3beanFactory后处理详解
 
 invokeBeanFactoryPostProcessors(beanFactory);
 
@@ -142,7 +142,20 @@ map.put(internalConfigurationAnntationProcessor, configurationClassPostProcessor
 3.8 剩余实现了BeanFactoryPostProcessor的接口被调用。
 
 通过上述的分析，可以看到对于BeanFactoryPostProcessor接口的调用形成一种有优先级关系的前后顺序，这个过程是springboot时代中实际注入大量bean（注解注入）以及一些中间件放入扩展信息的位置。
+****
+####configurationClassPostProcessor注解解析器
 
+这个解析器会扫描项目全包，找到所有加上@Configuration和@Component（注：所有@service，@controller本质上都是@Component）的类放入spring容器中。
 
+然后会继续引入加上@import，@importSelector，@importBeanDefinitionRegistry的注解的bean，以及上一步@Configuration中通过@bean的方法生成的bean加入
+容器。
 
+****
+###4BeanPostProcessor
+
+之前的BeanFactoryPostProcessor是针对的BeanFactory的扩展，在实例化之前读取修改增加bean，
+而BeanPostProcessor是针对bean的扩展，用于在bean初始化前后对bean进行进一步处理。
+
+这里整体的流程与BeanFactoryPostProcessor类似，以一种优先级关系前后注册，**但是这里只注册，不调用**，
+具体的调用是在bean初始化前后调用注册的postProcessBeforeInitialization方法和postProcessAfterInitialization。
 
