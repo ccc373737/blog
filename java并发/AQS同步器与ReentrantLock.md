@@ -138,3 +138,9 @@ signalAll是将wait队列所有节点变为signal。
 
 condition的优势在于可以控制更细的竞争颗粒，synchronized必须以对象为上锁单位，而一个lock则可以创建多个condition，对多个条件进行控制。
 比如生产者线程和消费者线程对于conditionP和conditionC，那么conditionC只控制消费者有关的线程。
+
+lock多了几个功能
+
+1.可中断的等待
+2.公平锁
+3.condition更小颗粒的控制

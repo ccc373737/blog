@@ -20,3 +20,7 @@ await是基于reentrantlock的condition实现。
 
 存在一个count属性，记录数量，当某个线程完成时，count减1，如果不为0，表示还有其他线程未执行完，那么调用condition.await()阻塞线程，
 当最后一个线程完成时，count=0，那么进入唤醒流程，condition.signalAll会唤醒所有线程继续执行。
+
+###3.semphore
+
+信号量，规定了可以进入的线程最大数量
