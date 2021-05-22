@@ -292,4 +292,6 @@ public class HotTest2 {
         nums[i] = nums[j];
         nums[j] = temp;
     }
+
+
 }
